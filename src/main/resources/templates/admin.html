@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+</head>
+<body>
+<div>
+  <h1>Users</h1>
+  <form th:action="@{/admin/add}">
+    <input type="submit" value="Add">
+  </form>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>UserName</th>
+      <th>LastName</th>
+      <th>Department</th>
+      <th>Salary</th>
+      <th>Password</th>
+      <th>Role</th>
+      <th>Action</th>
+    </tr>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.getId()}"></td>
+      <td th:text="${user.getUsername()}"></td>
+      <td th:text="${user.getLastName()}"></td>
+      <td th:text="${user.getDepartment()}"></td>
+      <td th:text="${user.getSalary()}"></td>
+      <td th:text="${user.getPassword()}"></td>
+      <td th:each="role : ${user.getRoles()}">
+        <p th:text="*{role.getRole()}"></p>
+      </td>
+      <td>
+        <form th:action="@{/admin/edit/{id}(id=${user.getId()})}">
+          <input type="submit" value="Edit">
+        </form>
+        <form th:object="${user}" th:action="@{/admin/delete/{id}(id=${user.getId()})}" method="DELETE">
+          <input type="submit" value="Delete">
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+<form th:method="POST" th:action="@{/logout}">
+  <input type="submit" value="Logout"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h1>User</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>UserName</th>
+        <th>LastName</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Password</th>
+        <th>Role</th>
+    </tr>
+    <div th:each="user : ${user}">
+        <tr>
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getLastName()}"></td>
+            <td th:text="${user.getDepartment()}"></td>
+            <td th:text="${user.getSalary()}"></td>
+            <td th:text="${user.getPassword()}"></td>
+            <td th:each="role : ${user.getRoles()}">
+                <p th:text="*{role.getRole()}"></p>
+            </td>
+        </tr>
+    </div>
+</table>
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
+</body>
+</html>
