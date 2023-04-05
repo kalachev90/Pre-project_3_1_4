@@ -11,6 +11,6 @@ import org.springframework.stereotype.Component;
 public class PasswordEncoderService {
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }

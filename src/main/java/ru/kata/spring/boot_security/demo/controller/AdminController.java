@@ -5,29 +5,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserServiceImpl userService, RoleServiceImpl roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping
-    public String getUsers(Model model){
+    public String getUsers(Model model, Principal principal){
+        model.addAttribute("userName", userService.findByUsername(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("user", new User());
         return "admin";
-    }
-
-    @GetMapping("/add")
-    public String addForm(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "add";
     }
 
     @PostMapping("/add")
@@ -40,12 +42,6 @@ public class AdminController {
     public String deleteUsers(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
-    }
-
-    @GetMapping(value = "/edit/{id}")
-    public String editForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "edit";
     }
 
     @PostMapping(value = "/edit/{id}")
